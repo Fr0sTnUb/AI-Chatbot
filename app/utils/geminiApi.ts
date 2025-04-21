@@ -24,7 +24,7 @@ export async function getAccessoryRecommendations(
 ): Promise<AccessoryRecommendation> {
   try {
     // For models that support multimodal input (text + image)
-    const model = genAI.getGenerativeModel({ model: "gemini-pro-vision" });
+    const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
 
     // Convert base64 image data to proper format for Gemini API
     const imageBase64 = imageData.split(",")[1];

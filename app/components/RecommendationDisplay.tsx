@@ -1,5 +1,8 @@
-import { FiShoppingBag } from 'react-icons/fi';
+import { FiShoppingBag, FiPlus, FiCheck } from 'react-icons/fi';
 import { AccessoryRecommendation } from '../utils/geminiApi';
+import { cn } from '../utils/cn';
+import { useState } from 'react';
+import { JewelryVector, AccessoriesVector, ShoesVector } from './FashionVectors';
 
 interface RecommendationDisplayProps {
   recommendations: AccessoryRecommendation | null;
@@ -10,20 +13,42 @@ export default function RecommendationDisplay({
   recommendations, 
   isLoading 
 }: RecommendationDisplayProps) {
+  const [expandedItems, setExpandedItems] = useState<number[]>([]);
+  
+  const toggleItem = (index: number) => {
+    setExpandedItems(prev => 
+      prev.includes(index) 
+        ? prev.filter(i => i !== index) 
+        : [...prev, index]
+    );
+  };
+
+  // Array of vector icons to cycle through for recommendation items
+  const vectorIcons = [JewelryVector, AccessoriesVector, ShoesVector];
+  
   if (isLoading) {
     return (
-      <div className="border rounded-lg p-6 mt-6 bg-white shadow-sm">
-        <div className="animate-pulse">
-          <div className="h-4 bg-gray-200 rounded w-3/4 mb-4"></div>
-          <div className="space-y-3">
+      <div className="card p-8 shadow-lg">
+        <div className="animate-pulse space-y-6">
+          <div className="flex items-center">
+            <div className="w-10 h-10 rounded-full bg-dark-100"></div>
+            <div className="h-6 bg-dark-100 rounded w-48 ml-4"></div>
+          </div>
+          
+          <div className="space-y-6">
             {[1, 2, 3].map((i) => (
-              <div key={i} className="grid grid-cols-4 gap-4">
-                <div className="h-3 bg-gray-200 rounded col-span-1"></div>
-                <div className="h-3 bg-gray-200 rounded col-span-3"></div>
+              <div key={i} className="space-y-2">
+                <div className="h-5 bg-dark-100 rounded w-1/3"></div>
+                <div className="h-4 bg-dark-100 rounded w-full"></div>
+                <div className="h-4 bg-dark-100 rounded w-2/3"></div>
               </div>
             ))}
           </div>
-          <div className="h-4 bg-gray-200 rounded w-2/3 mt-6"></div>
+          
+          <div className="pt-4 border-t border-dark-100">
+            <div className="h-4 bg-dark-100 rounded w-full"></div>
+            <div className="h-4 bg-dark-100 rounded w-5/6 mt-2"></div>
+          </div>
         </div>
       </div>
     );
@@ -34,26 +59,73 @@ export default function RecommendationDisplay({
   }
 
   return (
-    <div className="border rounded-lg p-6 mt-6 bg-white shadow-sm">
-      <h2 className="text-xl font-semibold mb-4 flex items-center">
-        <FiShoppingBag className="mr-2" /> 
-        Recommended Accessories
-      </h2>
-      
-      <ul className="divide-y">
-        {recommendations.items.map((item, index) => (
-          <li key={index} className="py-3">
-            <h3 className="font-medium">{item.name}</h3>
-            <p className="text-gray-600 text-sm">{item.description}</p>
-          </li>
-        ))}
-      </ul>
-      
-      {recommendations.explanation && (
-        <div className="mt-4 pt-4 border-t text-sm text-gray-700">
-          <p className="italic">{recommendations.explanation}</p>
-        </div>
-      )}
+    <div className="card pearl-effect">
+      <div className="relative z-10 p-8">
+        <h2 className="text-2xl font-semibold mb-6 flex items-center gradient-text">
+          <div className="bg-dark-300 p-2 rounded-lg mr-3">
+            <FiShoppingBag className="text-primary" size={22} />
+          </div>
+          Recommended Accessories
+        </h2>
+        
+        <ul className="divide-y divide-dark-100 mb-6">
+          {recommendations.items.map((item, index) => {
+            const isExpanded = expandedItems.includes(index);
+            const VectorIcon = vectorIcons[index % vectorIcons.length];
+            
+            return (
+              <li key={index} className="py-4 interactive-element">
+                <div
+                  className="flex justify-between items-start cursor-pointer"
+                  onClick={() => toggleItem(index)}
+                >
+                  <div className="flex">
+                    <div className="flex-shrink-0 mr-3 mt-1">
+                      <div className="w-8 h-8 bg-dark-300 rounded-full flex items-center justify-center">
+                        <VectorIcon className="w-5 h-5" />
+                      </div>
+                    </div>
+                    <div>
+                      <h3 className="font-medium text-white text-lg">{item.name}</h3>
+                      <p className={cn(
+                        "text-gray-300 transition-all duration-300",
+                        isExpanded ? "line-clamp-none mt-2" : "line-clamp-2"
+                      )}>
+                        {item.description}
+                      </p>
+                    </div>
+                  </div>
+                  <button 
+                    className={cn(
+                      "p-1 rounded-full border transition-all duration-300",
+                      isExpanded 
+                        ? "border-primary bg-primary bg-opacity-10" 
+                        : "border-dark-100 hover:border-primary"
+                    )}
+                  >
+                    {isExpanded ? (
+                      <FiCheck className="text-primary" size={16} />
+                    ) : (
+                      <FiPlus className="text-gray-400" size={16} />
+                    )}
+                  </button>
+                </div>
+              </li>
+            );
+          })}
+        </ul>
+        
+        {recommendations.explanation && (
+          <div className="mt-6 pt-6 border-t border-dark-100 text-gray-300">
+            <div className="flex items-start">
+              <div className="flex-shrink-0 mr-3">
+                <AccessoriesVector className="w-8 h-8" />
+              </div>
+              <p className="italic">{recommendations.explanation}</p>
+            </div>
+          </div>
+        )}
+      </div>
     </div>
   );
 } 

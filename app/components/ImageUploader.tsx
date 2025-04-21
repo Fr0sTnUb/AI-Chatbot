@@ -58,7 +58,7 @@ export default function ImageUploader({ onImageSelect, className }: ImageUploade
           "border-2 border-dashed p-6 cursor-pointer transition-all flex flex-col items-center justify-center relative",
           "bg-dark-300 hover:bg-dark-200 interactive-element",
           (isDragActive || dragging) 
-            ? "border-primary bg-dark-300" 
+            ? "border-primary bg-dark-300 shadow-[0_0_15px_rgba(255,59,59,0.2)]" 
             : "border-dark-100 hover:border-primary",
           "rounded-xl min-h-[220px]"
         )}
@@ -94,19 +94,19 @@ export default function ImageUploader({ onImageSelect, className }: ImageUploade
           )}>
             <div className="pearl-effect rounded-full bg-dark-200 p-4 inline-block mb-4 relative">
               <div className="relative z-10">
-                <FiUpload className="text-primary h-8 w-8" />
+                <FiUpload className="text-primary h-10 w-10" />
               </div>
-              <div className="absolute -top-5 -right-6 transform rotate-12 opacity-20">
-                <TShirtVector className="w-12 h-12" />
+              <div className="absolute -top-6 -right-10 transform rotate-12 opacity-60 scale-125 shadow-[0_0_20px_rgba(255,59,59,0.4)]">
+                <TShirtVector className="w-16 h-16" />
               </div>
-              <div className="absolute -bottom-3 -left-6 transform -rotate-12 opacity-20">
-                <DressVector className="w-12 h-12" />
+              <div className="absolute -bottom-4 -left-10 transform -rotate-12 opacity-60 scale-125 shadow-[0_0_20px_rgba(255,59,59,0.4)]">
+                <DressVector className="w-16 h-16" />
               </div>
             </div>
-            <p className="mt-2 text-gray-300">
+            <p className="mt-2 text-gray-300 text-lg">
               <span className="text-primary font-medium">Drag & drop</span> an outfit image, or <span className="text-primary font-medium">click to browse</span>
             </p>
-            <p className="mt-1 text-xs text-gray-400">PNG, JPG, or WEBP format</p>
+            <p className="mt-1 text-gray-400">PNG, JPG, or WEBP format</p>
             <Button 
               className="mt-6" 
               variant="outline"

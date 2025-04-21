@@ -13,11 +13,11 @@ export const HangerVector: React.FC<VectorProps> = ({ className, animate = false
       viewBox="0 0 24 24" 
       fill="none" 
       stroke="currentColor" 
-      strokeWidth="1.5" 
+      strokeWidth="2" 
       strokeLinecap="round" 
       strokeLinejoin="round" 
       className={cn(
-        "text-primary", 
+        "text-primary filter drop-shadow-[0_0_3px_rgba(255,59,59,0.7)]", 
         animate && "animate-pulse-slow", 
         className
       )}
@@ -36,11 +36,11 @@ export const DressVector: React.FC<VectorProps> = ({ className, animate = false 
       viewBox="0 0 24 24" 
       fill="none" 
       stroke="currentColor" 
-      strokeWidth="1.5" 
+      strokeWidth="2" 
       strokeLinecap="round" 
       strokeLinejoin="round" 
       className={cn(
-        "text-primary", 
+        "text-primary filter drop-shadow-[0_0_3px_rgba(255,59,59,0.7)]", 
         animate && "animate-pulse-slow", 
         className
       )}
@@ -62,11 +62,11 @@ export const TShirtVector: React.FC<VectorProps> = ({ className, animate = false
       viewBox="0 0 24 24" 
       fill="none" 
       stroke="currentColor" 
-      strokeWidth="1.5" 
+      strokeWidth="2" 
       strokeLinecap="round" 
       strokeLinejoin="round" 
       className={cn(
-        "text-primary", 
+        "text-primary filter drop-shadow-[0_0_3px_rgba(255,59,59,0.7)]", 
         animate && "animate-pulse-slow", 
         className
       )}
@@ -84,11 +84,11 @@ export const ShoesVector: React.FC<VectorProps> = ({ className, animate = false 
       viewBox="0 0 24 24" 
       fill="none" 
       stroke="currentColor" 
-      strokeWidth="1.5" 
+      strokeWidth="2" 
       strokeLinecap="round" 
       strokeLinejoin="round" 
       className={cn(
-        "text-primary", 
+        "text-primary filter drop-shadow-[0_0_3px_rgba(255,59,59,0.7)]", 
         animate && "animate-pulse-slow", 
         className
       )}
@@ -106,11 +106,11 @@ export const AccessoriesVector: React.FC<VectorProps> = ({ className, animate = 
       viewBox="0 0 24 24" 
       fill="none" 
       stroke="currentColor" 
-      strokeWidth="1.5" 
+      strokeWidth="2" 
       strokeLinecap="round" 
       strokeLinejoin="round" 
       className={cn(
-        "text-primary", 
+        "text-primary filter drop-shadow-[0_0_3px_rgba(255,59,59,0.7)]", 
         animate && "animate-pulse-slow", 
         className
       )}
@@ -132,11 +132,11 @@ export const JewelryVector: React.FC<VectorProps> = ({ className, animate = fals
       viewBox="0 0 24 24" 
       fill="none" 
       stroke="currentColor" 
-      strokeWidth="1.5" 
+      strokeWidth="2" 
       strokeLinecap="round" 
       strokeLinejoin="round" 
       className={cn(
-        "text-primary", 
+        "text-primary filter drop-shadow-[0_0_3px_rgba(255,59,59,0.7)]", 
         animate && "animate-pulse-slow", 
         className
       )}

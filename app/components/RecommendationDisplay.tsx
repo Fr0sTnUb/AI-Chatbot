@@ -62,8 +62,8 @@ export default function RecommendationDisplay({
     <div className="card pearl-effect">
       <div className="relative z-10 p-8">
         <h2 className="text-2xl font-semibold mb-6 flex items-center gradient-text">
-          <div className="bg-dark-300 p-2 rounded-lg mr-3">
-            <FiShoppingBag className="text-primary" size={22} />
+          <div className="bg-dark-300 p-3 rounded-lg mr-3 shadow-[0_0_15px_rgba(255,59,59,0.2)]">
+            <FiShoppingBag className="text-primary" size={24} />
           </div>
           Recommended Accessories
         </h2>
@@ -74,15 +74,15 @@ export default function RecommendationDisplay({
             const VectorIcon = vectorIcons[index % vectorIcons.length];
             
             return (
-              <li key={index} className="py-4 interactive-element">
+              <li key={index} className="py-4 interactive-element hover:bg-dark-300/30 rounded-lg p-2 transition-all duration-300">
                 <div
                   className="flex justify-between items-start cursor-pointer"
                   onClick={() => toggleItem(index)}
                 >
                   <div className="flex">
                     <div className="flex-shrink-0 mr-3 mt-1">
-                      <div className="w-8 h-8 bg-dark-300 rounded-full flex items-center justify-center">
-                        <VectorIcon className="w-5 h-5" />
+                      <div className="w-12 h-12 bg-dark-300 rounded-full flex items-center justify-center shadow-[0_0_10px_rgba(255,59,59,0.2)] hover:shadow-[0_0_15px_rgba(255,59,59,0.3)] transition-shadow duration-300">
+                        <VectorIcon className="w-7 h-7" />
                       </div>
                     </div>
                     <div>
@@ -97,16 +97,16 @@ export default function RecommendationDisplay({
                   </div>
                   <button 
                     className={cn(
-                      "p-1 rounded-full border transition-all duration-300",
+                      "p-2 rounded-full border transition-all duration-300",
                       isExpanded 
-                        ? "border-primary bg-primary bg-opacity-10" 
+                        ? "border-primary bg-primary bg-opacity-10 shadow-[0_0_10px_rgba(255,59,59,0.2)]" 
                         : "border-dark-100 hover:border-primary"
                     )}
                   >
                     {isExpanded ? (
-                      <FiCheck className="text-primary" size={16} />
+                      <FiCheck className="text-primary" size={18} />
                     ) : (
-                      <FiPlus className="text-gray-400" size={16} />
+                      <FiPlus className="text-gray-400" size={18} />
                     )}
                   </button>
                 </div>
@@ -118,10 +118,12 @@ export default function RecommendationDisplay({
         {recommendations.explanation && (
           <div className="mt-6 pt-6 border-t border-dark-100 text-gray-300">
             <div className="flex items-start">
-              <div className="flex-shrink-0 mr-3">
-                <AccessoriesVector className="w-8 h-8" />
+              <div className="flex-shrink-0 mr-4">
+                <div className="w-12 h-12 flex items-center justify-center shadow-[0_0_10px_rgba(255,59,59,0.2)] bg-dark-300 rounded-full">
+                  <AccessoriesVector className="w-7 h-7" />
+                </div>
               </div>
-              <p className="italic">{recommendations.explanation}</p>
+              <p className="italic text-lg">{recommendations.explanation}</p>
             </div>
           </div>
         )}

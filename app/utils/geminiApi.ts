@@ -2,7 +2,7 @@ import { GoogleGenerativeAI } from "@google/generative-ai";
 
 // Initialize the Gemini API with the API key from environment variables
 // Fallback to hardcoded key if not available (for development)
-const API_KEY = process.env.GEMINI_API_KEY || "AIzaSyAg95CL8k-4apaFmrYgcR-AH4u4P_svXz4";
+const API_KEY = process.env.GEMINI_API_KEY || "YOUR_API_KEY";
 const genAI = new GoogleGenerativeAI(API_KEY);
 
 export interface AccessoryRecommendation {

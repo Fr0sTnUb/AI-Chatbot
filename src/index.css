@@ -1,0 +1,1943 @@
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Raleway:wght@200;300;400;500&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --gold-dk: #b8860b;
+  --gold-mid: #daa520;
+  --gold-lt: #ffd700;
+  --gold-pale: #fffacd;
+  --text-1: #F5F0E8;
+  --text-2: #C8C0A8;
+  --text-3: #555555;
+  --text-4: #333333;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background: #080808;
+
+  font-family: 'Raleway',
+  sa# AI-Chatbot Migration Prompt ## Next.js 14 → React 19+Vite 8+Animated Dark Glamour Theme ### Complete rewrite — do not keep any Next.js files --- ## STEP 0 — NUKE THE OLD PROJECT Delete everything except `.git`,
+  `.gitignore`,
+  and `README.md`. We are starting fresh. Do not attempt to migrate Next.js files one by one. --- ## STEP 1 — SCAFFOLD NEW PROJECT ```bash npm create vite@latest . -- --template react-ts ``` Then upgrade React to 19 (Vite scaffolds React 18 by default): ```bash npm install react@19 react-dom@19 npm install -D @types/react@19 @types/react-dom@19 ``` Install all project dependencies: ```bash npm install react-dropzone npm install -D tailwindcss@3 postcss autoprefixer npx tailwindcss init -p ``` --- ## STEP 2 — FINAL PROJECT STRUCTURE ``` / ├── public/ │ └── vite.svg ├── src/ │ ├── api/ │ │ └── analyze.ts ← Gemini API call (client-side fetch) │ ├── components/ │ │ ├── Navbar.tsx │ │ ├── Hero.tsx │ │ ├── UploadPanel.tsx │ │ ├── AnalyzeButton.tsx │ │ ├── RecommendationCard.tsx │ │ ├── RecommendationList.tsx │ │ ├── RecommendationSkeleton.tsx │ │ └── Particles.tsx │ ├── hooks/ │ │ └── useAnalyze.ts │ ├── types/ │ │ └── index.ts │ ├── App.tsx │ ├── main.tsx │ └── index.css ├── .env.local ← GEMINI_API_KEY goes here (never commit) ├── .env.example ├── .gitignore ├── index.html ├── vite.config.ts ├── tailwind.config.js ├── tsconfig.json ├── tsconfig.node.json └── package.json ``` --- ## STEP 3 — CONFIGURATION FILES ### `vite.config.ts` ```ts import {
+    defineConfig
+  }
+
+  from 'vite';
+  import react from '@vitejs/plugin-react';
+  import path from 'path';
+
+  export default defineConfig({
+
+    plugins: [react()],
+    resolve: {
+      alias: {
+        '@': path.resolve(__dirname, './src')
+      }
+
+      ,
+    }
+
+    ,
+    server: {
+      port: 5173,
+      open: true,
+    }
+
+    ,
+    build: {
+      target: 'esnext',
+      minify: 'esbuild',
+    }
+
+    ,
+  });
+``` ### `tailwind.config.js` ```js
+
+/** @type {import('tailwindcss').Config} */
+export default {
+
+  content: ['./index.html',
+  './src/**/*.{ts,tsx}'],
+  theme: {
+    extend: {
+      fontFamily: {
+        display: ['"Playfair Display"', 'serif'],
+          ui: ['Raleway', 'sans-serif'],
+      }
+
+      ,
+      colors: {
+        'gold-dk': '#b8860b',
+          'gold-mid': '#daa520',
+          'gold-lt': '#ffd700',
+          'gold-pale': '#fffacd',
+          ink: '#080808',
+          surface: '#0e0e0e',
+      }
+
+      ,
+    }
+
+    ,
+  }
+
+  ,
+  plugins: [],
+}
+
+;
+
+``` ### `tsconfig.json` ```json {
+  "compilerOptions": {
+
+    "target": "ES2022",
+    "lib": ["ES2022",
+    "DOM",
+    "DOM.Iterable"],
+    "module": "ESNext",
+    "moduleResolution": "bundler",
+    "jsx": "react-jsx",
+    "strict": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["./src/*"]
+    }
+  }
+
+  ,
+  "include": ["src"]
+}
+
+``` ### `.env.example` ``` VITE_GEMINI_API_KEY=your_gemini_api_key_here ``` ### `.env.local` ← create this,
+never commit ``` VITE_GEMINI_API_KEY=your_actual_key_here ```>**IMPORTANT**: In Vite,
+env vars must be prefixed `VITE_` to be exposed to the browser.>Access them as `import.meta.env.VITE_GEMINI_API_KEY`. --- ## STEP 4 — GLOBAL CSS (`src/index.css`) ```css @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Raleway:wght@200;300;400;500&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --gold-dk: #b8860b;
+  --gold-mid: #daa520;
+  --gold-lt: #ffd700;
+  --gold-pale: #fffacd;
+  --text-1: #F5F0E8;
+  --text-2: #C8C0A8;
+  --text-3: #555555;
+  --text-4: #333333;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background: #080808;
+  font-family: 'Raleway', sans-serif;
+  color: var(--text-1);
+  overflow-x: hidden;
+}
+
+/* ── Shimmer text ─────────────────────────────────── */
+.shimmer-text {
+  background: linear-gradient(90deg, var(--gold-dk), var(--gold-lt), var(--gold-pale),
+      var(--gold-mid), var(--gold-dk));
+  background-size: 300% auto;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: shimmer 3s linear infinite;
+}
+
+/* ── Shimmer background (buttons) ────────────────── */
+.shimmer-bg {
+  background: linear-gradient(90deg, var(--gold-dk), var(--gold-mid), var(--gold-lt),
+      var(--gold-pale), var(--gold-lt), var(--gold-mid), var(--gold-dk));
+  background-size: 300% auto;
+  animation: shimmer 2.5s linear infinite;
+}
+
+/* ── Gold line ────────────────────────────────────── */
+.gold-line {
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--gold-dk) 20%,
+      var(--gold-lt) 50%, var(--gold-dk) 80%, transparent);
+}
+
+/* ── Keyframes ────────────────────────────────────── */
+@keyframes shimmer {
+  0% {
+    background-position: -300% center;
+  }
+
+  100% {
+    background-position: 300% center;
+  }
+}
+
+@keyframes pulse-dot {
+
+  0%,
+  100% {
+    opacity: 1;
+    transform: scale(1) rotate(0deg);
+  }
+
+  50% {
+    opacity: .4;
+    transform: scale(.6) rotate(180deg);
+  }
+}
+
+@keyframes float {
+
+  0%,
+  100% {
+    transform: translateY(0) rotate(-1deg);
+  }
+
+  50% {
+    transform: translateY(-7px) rotate(1deg);
+  }
+}
+
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes scanline {
+  0% {
+    transform: translateY(-100%);
+    opacity: .5;
+  }
+
+  100% {
+    transform: translateY(500%);
+    opacity: 0;
+  }
+}
+
+@keyframes borderGlow {
+
+  0%,
+  100% {
+    box-shadow: 0 0 0 0 rgba(255, 215, 0, 0);
+  }
+
+  50% {
+    box-shadow: 0 0 20px 2px rgba(255, 215, 0, .1);
+  }
+}
+
+@keyframes cornerPulse {
+
+  0%,
+  100% {
+    opacity: .35;
+  }
+
+  50% {
+    opacity: 1;
+  }
+}
+
+@keyframes particleDrift {
+  0% {
+    transform: translateY(0) translateX(0) scale(1);
+    opacity: .7;
+  }
+
+  100% {
+    transform: translateY(-90px) translateX(var(--dx, 0px)) scale(0);
+    opacity: 0;
+  }
+}
+
+@keyframes revealLine {
+  from {
+    width: 0;
+  }
+
+  to {
+    width: 32px;
+  }
+}
+
+@keyframes glowPulse {
+
+  0%,
+  100% {
+    text-shadow: 0 0 8px rgba(255, 215, 0, .15);
+  }
+
+  50% {
+    text-shadow: 0 0 28px rgba(255, 215, 0, .5),
+      0 0 56px rgba(255, 215, 0, .15);
+  }
+}
+
+@keyframes rotateStar {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes navSlide {
+  from {
+    opacity: 0;
+    transform: translateY(-100%);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes tagAppear {
+  from {
+    transform: scale(.7);
+    opacity: 0;
+  }
+
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes heroReveal {
+  from {
+    opacity: 0;
+    letter-spacing: .3em;
+  }
+
+  to {
+    opacity: 1;
+    letter-spacing: -.015em;
+  }
+}
+
+/* ── Utility animation classes ────────────────────── */
+.anim-fadeUp {
+  animation: fadeUp .5s ease both;
+}
+
+.anim-navSlide {
+  animation: navSlide .6s cubic-bezier(.16, 1, .3, 1) both;
+}
+
+.anim-float {
+  animation: float 3s ease-in-out infinite;
+}
+
+.anim-rotateStar {
+  animation: rotateStar 4s linear infinite;
+}
+
+.anim-glowPulse {
+  animation: glowPulse 3s ease-in-out infinite;
+}
+
+.anim-cornerPulse {
+  animation: cornerPulse 2s ease-in-out infinite;
+}
+
+.anim-scanline {
+  animation: scanline 4s ease-in-out infinite;
+}
+
+.anim-shimmerText {
+  animation: shimmer 3s linear infinite, glowPulse 4s ease-in-out infinite;
+}
+
+``` --- ## STEP 5 — TYPES (`src/types/index.ts`) ```ts export interface Recommendation {
+  number: number;
+  name: string;
+  description: string;
+  tip: string;
+  category: string;
+}
+
+export interface AnalyzeResult {
+  raw: string;
+  recommendations: Recommendation[];
+  analyzedAt: string;
+}
+
+export type AnalyzeState=| {
+  status: 'idle'
+}
+
+| {
+  status: 'loading'
+}
+
+| {
+  status: 'success';
+  data: AnalyzeResult
+}
+
+| {
+  status: 'error';
+  message: string
+}
+
+;
+
+``` --- ## STEP 6 — API LAYER (`src/api/analyze.ts`)>Note: Since this is now a pure client-side React app (no server),
+the Gemini API>call happens directly from the browser using the `VITE_GEMINI_API_KEY`.>This is acceptable for a portfolio/demo project.>For production,
+you would proxy through a backend. ```ts import type {
+  AnalyzeResult,
+  Recommendation
+}
+
+from '@/types';
+
+const API_KEY=import.meta.env.VITE_GEMINI_API_KEY as string;
+const GEMINI_URL=`https: //generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${API_KEY}`;
+
+const PROMPT=` You are a professional fashion stylist. Analyze the outfit in this image. Return exactly 5 accessory recommendations. For each provide: 1. The accessory name 2. Why it works with this outfit (1-2 sentences, editorial Vogue tone) 3. One specific styling tip 4. A single category word (e.g. Jewelry, Bags, Eyewear, Shoes, Scarves) Format EXACTLY as: 1. [Name] | [Description] | [Tip] | [Category] 2. ... (and so on for all 5) `;
+
+function parseRecommendations(raw: string): Recommendation[] {
+  return raw .split('\n') .filter(line=> /^\d\./.test(line.trim())) .map((line, i)=> {
+      const parts=line.replace(/^\d\.\s*/, '').split('|').map(s=> s.trim());
+
+      return {
+        number: i + 1,
+        name: parts[0] ?? 'Accessory',
+        description: parts[1] ?? '',
+        tip: parts[2] ?? '',
+        category: parts[3] ?? 'Style',
+      }
+
+      ;
+    });
+}
+
+export async function analyzeOutfit(file: File): Promise<AnalyzeResult> {
+  if ( !API_KEY) throw new Error('VITE_GEMINI_API_KEY is not set in your .env.local file.');
+
+  const base64=await fileToBase64(file);
+  const mimeType=file.type as 'image/jpeg' | 'image/png' | 'image/webp';
+
+  const body= {
+    contents: [ {
+      parts: [ {
+        text: PROMPT
+      }
+
+      ,
+      {
+      inlineData: {
+        mimeType,
+        data: base64
+      }
+    }
+
+    ,
+    ],
+  }
+
+  ],
+}
+
+;
+
+const res=await fetch(GEMINI_URL, {
+
+  method: 'POST',
+  headers: {
+    'Content-Type': 'application/json'
+  }
+
+  ,
+  body: JSON.stringify(body),
+});
+
+if ( !res.ok) {
+  const err=await res.json().catch(()=> ({}));
+
+const msg=(err as {
+    error?: {
+      message?: string
+    }
+
+  })?.error?.message ?? `API error $ {
+  res.status
+}
+
+`;
+if (res.status===429) throw new Error('API quota exceeded. Try again later.');
+throw new Error(msg);
+}
+
+const data=await res.json() as {
+  candidates: Array< {
+    content: {
+      parts: Array< {
+        text: string
+      }
+
+      >
+    }
+  }
+
+  >;
+}
+
+;
+
+const raw=data.candidates?.[0]?.content?.parts?.[0]?.text ?? '';
+
+return {
+  raw,
+  recommendations: parseRecommendations(raw),
+    analyzedAt: new Date().toISOString(),
+}
+
+;
+}
+
+function fileToBase64(file: File): Promise<string> {
+  return new Promise((resolve, reject)=> {
+      const reader=new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload=()=> resolve((reader.result as string).split(',')[1]);
+      reader.onerror=reject;
+    });
+}
+
+``` --- ## STEP 7 — CUSTOM HOOK (`src/hooks/useAnalyze.ts`) ```ts import {
+  useState,
+  useCallback
+}
+
+from 'react';
+
+import {
+  analyzeOutfit
+}
+
+from '@/api/analyze';
+
+import type {
+  AnalyzeState
+}
+
+from '@/types';
+
+export function useAnalyze() {
+
+  const [state,
+  setState]=useState<AnalyzeState>({
+    status: 'idle'
+  });
+
+const analyze=useCallback(async (file: File)=> {
+    setState({
+      status: 'loading'
+    });
+
+  try {
+    const data=await analyzeOutfit(file);
+
+    setState({
+      status: 'success', data
+    });
+}
+
+catch (err) {
+  setState({
+    status: 'error',
+    message: err instanceof Error ? err.message : 'Something went wrong.',
+  });
+}
+}
+
+, []);
+
+const reset=useCallback(()=> setState({
+    status: 'idle'
+  }), []);
+
+return {
+  state,
+  analyze,
+  reset
+}
+
+;
+}
+
+``` --- ## STEP 8 — COMPONENTS ### `src/components/Particles.tsx` ```tsx const PARTICLES=[ {
+  left: '10%', top: '80%', dx: '20px', delay: '0s', dur: '3.5s'
+}
+
+,
+{
+left: '25%', top: '90%', dx: '-15px', delay: '0.8s', dur: '4s'
+}
+
+,
+{
+left: '45%', top: '85%', dx: '10px', delay: '1.6s', dur: '3s'
+}
+
+,
+{
+left: '65%', top: '88%', dx: '-25px', delay: '0.4s', dur: '4.5s'
+}
+
+,
+{
+left: '80%', top: '82%', dx: '18px', delay: '1.2s', dur: '3.8s'
+}
+
+,
+{
+left: '90%', top: '90%', dx: '-12px', delay: '2s', dur: '3.2s'
+}
+
+,
+{
+left: '55%', top: '92%', dx: '22px', delay: '0.2s', dur: '5s'
+}
+
+,
+{
+left: '35%', top: '78%', dx: '-8px', delay: '1.8s', dur: '4.2s'
+}
+
+,
+];
+
+export default function Particles() {
+  return (<div style= {
+        {
+        position:'absolute', inset:0, pointerEvents:'none', overflow:'hidden', zIndex:0
+      }
+    }
+
+    > {
+      PARTICLES.map((p, i)=> (<div key= {
+            i
+          }
+
+          style= {
+              {
+
+              position: 'absolute',
+              width: '2px',
+              height: '2px',
+              background: '#ffd700',
+              borderRadius: '50%',
+              left: p.left,
+              top: p.top,
+              ['--dx' as string]: p.dx,
+              animation: `particleDrift $ {
+                p.dur
+              }
+
+              ease-out infinite`,
+              animationDelay: p.delay,
+            }
+          }
+
+          />))
+    }
+
+    </div>);
+}
+
+``` ### `src/components/Navbar.tsx` ```tsx export default function Navbar() {
+  return (<nav style= {
+        {
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        padding: '0 28px',
+        height: '58px',
+        background: 'rgba(8,8,8,0.95)',
+        backdropFilter: 'blur(8px)',
+        borderBottom: '1px solid #1a1a1a',
+        position: 'relative',
+        zIndex: 10,
+      }
+    }
+
+    className="anim-navSlide" > {
+      /* gold shimmer bottom line */
+    }
+
+    <div style= {
+        {
+        position:'absolute', bottom:'-1px', left:0, right:0,
+        height:'1px',
+        background:'linear-gradient(90deg,transparent,#b8860b55,#ffd70088,#b8860b55,transparent)',
+      }
+    }
+
+    className="shimmer-bg" /> {
+      /* Logo */
+    }
+
+    <div style= {
+        {
+        display:'flex', alignItems:'center', gap:'8px'
+      }
+    }
+
+    className="anim-glowPulse" > <svg width="14" height="14" viewBox="0 0 14 14" className="anim-rotateStar" > <path d="M7 1l1.5 4h4l-3.2 2.4 1.2 4L7 9l-3.5 2.4 1.2-4L1.5 5h4z"
+
+    fill="#ffd700" opacity=".9" /> </svg> <span style= {
+        {
+        fontFamily:"'Playfair Display',serif", fontSize:'20px', fontWeight:700, letterSpacing:'.08em', textTransform:'uppercase'
+      }
+    }
+
+    className="shimmer-text" > StyleBot </span> </div> {
+      /* Right */
+    }
+
+    <div style= {
+        {
+        display:'flex', alignItems:'center', gap:'10px'
+      }
+    }
+
+    > <div style= {
+        {
+        width:'6px', height:'6px', background:'#ffd700', borderRadius:'50%',
+        boxShadow:'0 0 6px #ffd70066',
+      }
+    }
+
+    className="anim-cornerPulse" /> <span style= {
+        {
+        fontSize:'9px', fontWeight:500, letterSpacing:'.18em', textTransform:'uppercase',
+        color:'#444', border:'1px solid #1f1f1f', padding:'5px 12px',
+      }
+    }
+
+    > Gemini AI </span> </div> </nav>);
+}
+
+``` ### `src/components/Hero.tsx` ```tsx export default function Hero() {
+  return (<div style= {
+        {
+        padding:'32px 28px 26px', background:'#080808', position:'relative', overflow:'hidden'
+      }
+    }
+
+    className="anim-fadeUp" > {
+      /* scan line */
+    }
+
+    <div style= {
+        {
+        position:'absolute', left:0, right:0, height:'60px',
+        background:'linear-gradient(180deg,transparent,rgba(255,215,0,.025),transparent)',
+        pointerEvents:'none',
+      }
+    }
+
+    className="anim-scanline" /> {
+      /* glow blob */
+    }
+
+    <div style= {
+        {
+        position:'absolute', top:'-40px', left:'50%', transform:'translateX(-50%)',
+        width:'400px', height:'160px',
+        background:'radial-gradient(ellipse,rgba(255,215,0,.07) 0%,transparent 65%)',
+        pointerEvents:'none',
+      }
+    }
+
+    /> <h1 style= {
+        {
+        fontFamily:"'Playfair Display',serif", fontSize:'36px', fontWeight:400, lineHeight:1.12
+      }
+    }
+
+    > <em style= {
+        {
+        color:'#888', fontStyle:'italic', display:'block'
+      }
+    }
+
+    >What goes with</em> <span className="shimmer-text" style= {
+        {
+        display:'block', animation:'shimmer 3s linear infinite, glowPulse 4s ease-in-out infinite'
+      }
+    }
+
+    > this outfit? </span> </h1> {
+      /* reveal line */
+    }
+
+    <div style= {
+        {
+        height:'1px', marginTop:'14px',
+        background:'linear-gradient(90deg,transparent,#b8860b,#ffd700,#b8860b,transparent)',
+        animation:'revealLine .8s .6s ease both, shimmer 4s 1.4s linear infinite',
+        backgroundSize:'300% auto', width:0,
+      }
+    }
+
+    /> <p style= {
+        {
+        marginTop:'10px', fontSize:'10px', letterSpacing:'.2em',
+        textTransform:'uppercase', color:'#333',
+        animation:'fadeUp .6s .8s ease both', opacity:0, animationFillMode:'forwards',
+      }
+    }
+
+    > AI-powered accessory recommendations </p> </div>);
+}
+
+``` ### `src/components/UploadPanel.tsx` ```tsx import {
+  useCallback,
+  useState
+}
+
+from 'react';
+
+import {
+  useDropzone
+}
+
+from 'react-dropzone';
+
+interface Props {
+  onFile: (file: File)=> void;
+}
+
+export default function UploadPanel({
+  onFile
+}
+
+: Props) {
+  const [preview,
+  setPreview]=useState<string | null>(null);
+  const [filename,
+  setFilename]=useState<string>('');
+
+  const onDrop=useCallback((files: File[])=> {
+      const file=files[0];
+      if ( !file) return;
+      setFilename(file.name);
+      setPreview(URL.createObjectURL(file));
+      onFile(file);
+    }
+
+    , [onFile]);
+
+  const {
+    getRootProps,
+    getInputProps,
+    isDragActive
+  }
+
+  =useDropzone({
+
+    onDrop,
+    accept: {
+      'image/jpeg': [], 'image/png': [], 'image/webp': []
+    }
+
+    ,
+    maxSize: 5 * 1024 * 1024,
+    multiple: false,
+  });
+
+const zoneStyle: React.CSSProperties= {
+  border: `1px solid $ {
+    isDragActive ? '#b8860b88': '#1a1a1a'
+  }
+
+  `,
+  background: '#0e0e0e',
+  display: 'flex',
+  flexDirection: 'column',
+  alignItems: 'center',
+  justifyContent: 'center',
+  padding: '34px 20px',
+  gap: '12px',
+  marginBottom: '14px',
+  cursor: 'pointer',
+  position: 'relative',
+  overflow: 'hidden',
+  transition: 'border-color .3s, box-shadow .3s',
+  boxShadow: isDragActive ? '0 0 24px rgba(255,215,0,.08)' : 'none',
+  minHeight: '200px',
+  animation: 'fadeUp .5s .5s ease both',
+  opacity: 0,
+  animationFillMode: 'forwards',
+}
+
+;
+
+return (<div> <div {
+    ...getRootProps()
+  }
+
+  style= {
+    zoneStyle
+  }
+
+  > <input {
+    ...getInputProps()
+  }
+
+  /> {
+    /* Scan line overlay */
+  }
+
+  <div style= {
+      {
+      position:'absolute', left:0, right:0, height:'80px',
+      background:'linear-gradient(180deg,transparent,rgba(255,215,0,.02),transparent)',
+      pointerEvents:'none',
+    }
+  }
+
+  className="anim-scanline" /> {
+    /* Corner brackets */
+  }
+
+    {
+    (['tl', 'tr', 'bl', 'br'] as const).map((pos, i)=> (<div key= {
+          pos
+        }
+
+        style= {
+            {
+
+            position: 'absolute',
+            width:'14px', height:'14px',
+            ...(pos.includes('t') ? {
+                top:'7px'
+              }
+
+              : {
+                bottom:'7px'
+
+              }),
+            ...(pos.includes('l') ? {
+                left:'7px'
+              }
+
+              : {
+                right:'7px'
+
+              }),
+            borderTop: pos.includes('t') ? '1px solid #b8860b' : undefined,
+            borderBottom: pos.includes('b') ? '1px solid #b8860b' : undefined,
+            borderLeft: pos.includes('l') ? '1px solid #b8860b' : undefined,
+            borderRight: pos.includes('r') ? '1px solid #b8860b' : undefined,
+            animation: `cornerPulse 2s ease-in-out infinite`,
+            animationDelay: `$ {
+              i * 0.5
+            }
+
+            s`,
+          }
+        }
+
+        />))
+  }
+
+    {
+    preview ? (<> <img src= {
+        preview
+      }
+
+      alt="Outfit preview"
+
+      style= {
+          {
+          width:'100%', height:'160px', objectFit:'cover', display:'block'
+        }
+      }
+
+      /> <div style= {
+          {
+          width:'100%', background:'rgba(8,8,8,.85)',
+          padding:'6px 10px', fontSize:'9px', color:'#666',
+          letterSpacing:'.08em', textTransform:'uppercase',
+        }
+      }
+
+      > {
+        filename
+      }
+
+      </div> </>) : (<> <div style= {
+          {
+          width:'46px', height:'46px', border:'1px solid #222',
+          display:'flex', alignItems:'center', justifyContent:'center',
+          background:'#111',
+        }
+      }
+
+      className="anim-float" > <svg width="18" height="18" viewBox="0 0 18 18" fill="none" > <path d="M9 3v9M5 7l4-4 4 4M2 14h14" stroke="#b8860b" strokeWidth="1.2" strokeLinecap="square" /> </svg> </div> <span style= {
+          {
+          fontFamily:"'Playfair Display',serif", fontSize:'17px', color:'#C8C0A8'
+        }
+      }
+
+      > Drop your outfit here </span> <span style= {
+          {
+          fontSize:'9px', color:'#333', letterSpacing:'.12em', textTransform:'uppercase'
+        }
+      }
+
+      > JPEG · PNG · WEBP · max 5MB </span> <button style= {
+          {
+          border:'1px solid #222', background:'transparent',
+          padding:'9px 22px', fontSize:'9px', fontWeight:500,
+          letterSpacing:'.14em', textTransform:'uppercase',
+          color:'#555', cursor:'pointer',
+          fontFamily:'Raleway, sans-serif',
+          marginTop:'4px', transition:'all .25s',
+        }
+      }
+
+      onMouseEnter= {
+        e=> {
+          (e.currentTarget as HTMLButtonElement).style.borderColor='#b8860b';
+          (e.currentTarget as HTMLButtonElement).style.color='#ffd700';
+        }
+      }
+
+      onMouseLeave= {
+        e=> {
+          (e.currentTarget as HTMLButtonElement).style.borderColor='#222';
+          (e.currentTarget as HTMLButtonElement).style.color='#555';
+        }
+      }
+
+      > Choose file </button> </>)
+  }
+
+  </div> </div>);
+}
+
+``` ### `src/components/AnalyzeButton.tsx` ```tsx interface Props {
+  onClick: ()=> void;
+  loading: boolean;
+  disabled: boolean;
+}
+
+export default function AnalyzeButton({
+  onClick, loading, disabled
+}
+
+: Props) {
+  return (<button onClick= {
+      onClick
+    }
+
+    disabled= {
+      disabled
+    }
+
+    style= {
+        {
+        width: '100%',
+        height: '48px',
+        border: 'none',
+        color: disabled ? '#555' : '#080808',
+        fontSize: '9px',
+        fontWeight: 600,
+        letterSpacing: '.18em',
+        textTransform: 'uppercase',
+        cursor: disabled ? 'not-allowed' : 'pointer',
+        fontFamily: 'Raleway, sans-serif',
+        position: 'relative',
+        overflow: 'hidden',
+        transition: 'box-shadow .3s',
+        background: disabled ? '#1a1a1a'
+        : 'linear-gradient(90deg,#b8860b,#daa520,#ffd700,#fffacd,#ffd700,#daa520,#b8860b)',
+        backgroundSize: '300% auto',
+        animation: disabled ? 'none' : 'shimmer 2.5s linear infinite, fadeUp .5s .6s ease both',
+        opacity: 0,
+        animationFillMode: 'forwards',
+      }
+    }
+
+    onMouseEnter= {
+      e=> {
+        if ( !disabled) (e.currentTarget as HTMLButtonElement).style.boxShadow='0 0 30px rgba(255,215,0,.25), 0 4px 20px rgba(255,215,0,.15)';
+      }
+    }
+
+    onMouseLeave= {
+      e=> {
+        (e.currentTarget as HTMLButtonElement).style.boxShadow='none';
+      }
+    }
+
+    > {
+      loading ? 'Analyzing\u00A0·\u00A0·\u00A0·' : 'Analyze outfit →'
+    }
+
+    </button>);
+}
+
+``` ### `src/components/RecommendationCard.tsx` ```tsx import {
+  useState
+}
+
+from 'react';
+
+import type {
+  Recommendation
+}
+
+from '@/types';
+
+interface Props {
+  rec: Recommendation;
+  delay: number;
+}
+
+export default function RecommendationCard({
+  rec, delay
+}
+
+: Props) {
+  const [hovered,
+  setHovered]=useState(false);
+
+  return (<div onMouseEnter= {
+      ()=> setHovered(true)
+    }
+
+    onMouseLeave= {
+      ()=> setHovered(false)
+    }
+
+    style= {
+        {
+        padding: `16px 0 16px $ {
+          hovered ? '6px' : '0'
+        }
+
+        `,
+        borderBottom: '1px solid #141414',
+        borderLeft: hovered ? '1px solid rgba(184,134,11,.4)' : '1px solid transparent',
+        transition: 'all .25s',
+        opacity: 0,
+        animation: `fadeUp .5s $ {
+          delay
+        }
+
+        s ease both`,
+        animationFillMode: 'forwards',
+        cursor: 'default',
+      }
+    }
+
+    > <div style= {
+        {
+        display:'flex', justifyContent:'space-between', alignItems:'flex-start', marginBottom:'7px'
+      }
+    }
+
+    > <span style= {
+        {
+        fontFamily:"'Playfair Display',serif", fontSize:'16px', fontWeight:400, lineHeight:1.2,
+        color: hovered ? undefined : '#E8E0CC',
+        transition: 'all .25s'
+      }
+    }
+
+    className= {
+      hovered ? 'shimmer-text' : ''
+    }
+
+    > {
+      rec.name
+    }
+
+    </span> <span style= {
+        {
+        fontSize:'9px', letterSpacing:'.1em', fontWeight:500, paddingTop:'3px',
+        color: hovered ? '#b8860b' : '#2a2a2a', transition:'color .25s',
+      }
+    }
+
+    > {
+      String(rec.number).padStart(2, '0')
+    }
+
+    </span> </div> {
+      /* animated gold bar */
+    }
+
+    <div style= {
+        {
+
+        height:'1px', width:'32px', marginBottom:'9px',
+        background:'linear-gradient(90deg,#b8860b,#ffd700,transparent)',
+        animation: `revealLine .6s $ {
+          delay + 0.2
+        }
+
+        s ease both`,
+        animationFillMode:'forwards',
+        width: 0,
+      }
+
+      as React.CSSProperties
+    }
+
+    /> <p style= {
+        {
+        fontSize:'12px', color: hovered ? '#555' : '#3e3e3e', lineHeight:1.7, transition:'color .25s'
+      }
+    }
+
+    > {
+      rec.description
+    }
+
+    </p> {
+      rec.tip && (<p style= {
+            {
+            marginTop:'7px', fontSize:'10px', color:'#b8860b', letterSpacing:'.04em',
+            opacity: hovered ? 1 : 0.8, transition:'opacity .25s'
+          }
+        }
+
+        > ↳ {
+          rec.tip
+        }
+
+        </p>)
+    }
+
+    <span style= {
+        {
+
+        display:'inline-block', fontSize:'8px', letterSpacing:'.14em', textTransform:'uppercase',
+        padding:'3px 9px', marginTop:'9px', transition:'all .25s',
+        border: hovered ? '1px solid rgba(184,134,11,.5)' : '1px solid rgba(184,134,11,.2)',
+        color: hovered ? '#b8860b' : '#444',
+        boxShadow: hovered ? '0 0 8px rgba(184,134,11,.1)' : 'none',
+        animation: `tagAppear .4s $ {
+          delay + 0.4
+        }
+
+        s ease both`,
+        animationFillMode: 'forwards',
+        opacity: 0,
+      }
+    }
+
+    > {
+      rec.category
+    }
+
+    </span> </div>);
+}
+
+``` ### `src/components/RecommendationList.tsx` ```tsx import RecommendationCard from './RecommendationCard';
+import RecommendationSkeleton from './RecommendationSkeleton';
+
+import type {
+  AnalyzeState
+}
+
+from '@/types';
+
+interface Props {
+  state: AnalyzeState
+}
+
+export default function RecommendationList({
+  state
+}
+
+: Props) {
+  const labelStyle: React.CSSProperties= {
+    fontSize: '9px', fontWeight:500, letterSpacing:'.2em', textTransform:'uppercase',
+      color:'#333', marginBottom:'18px', display:'flex', alignItems:'center', gap:'10px',
+      animation:'fadeUp .5s .4s ease both', opacity:0, animationFillMode:'forwards',
+  }
+
+  ;
+
+  return (<div> <div style= {
+      labelStyle
+    }
+
+    > <span>Recommendations</span> <div style= {
+        {
+        flex:1, height:'1px', background:'linear-gradient(90deg,#1f1f1f,transparent)'
+      }
+    }
+
+    /> </div> {
+      state.status==='idle' && (<div style= {
+            {
+            display:'flex', flexDirection:'column', justifyContent:'center', height:'200px', gap:'6px'
+          }
+        }
+
+        > <p style= {
+            {
+            fontFamily:"'Playfair Display',serif", fontSize:'20px', color:'#1a1a1a'
+          }
+        }
+
+        > Upload an outfit to get started. </p> </div>)
+    }
+
+      {
+      state.status==='loading' && <RecommendationSkeleton />
+    }
+
+      {
+      state.status==='error' && (<div style= {
+            {
+            borderLeft:'2px solid #b8860b', padding:'12px 16px',
+            background:'rgba(184,134,11,.04)',
+          }
+        }
+
+        > <p style= {
+            {
+            fontSize:'13px', color:'#C8C0A8', marginBottom:'8px'
+          }
+        }
+
+        > {
+          state.message
+        }
+
+        </p> <span style= {
+            {
+            fontSize:'11px', color:'#b8860b', textDecoration:'underline', cursor:'pointer'
+          }
+        }
+
+        > Try again </span> </div>)
+    }
+
+      {
+      state.status==='success' && (<div> <div style= {
+            {
+            borderTop:'1px solid #1e1e1e'
+          }
+        }
+
+        > {
+          state.data.recommendations.map((rec, i)=> (<RecommendationCard key= {
+                rec.number
+              }
+
+              rec= {
+                rec
+              }
+
+              delay= {
+                0.5 + i * 0.15
+              }
+
+              />))
+        }
+
+        </div> </div>)
+    }
+
+    </div>);
+}
+
+``` ### `src/components/RecommendationSkeleton.tsx` ```tsx const bars=[ [ {
+  w: '30%', h: '9px'
+}
+
+,
+{
+w: '65%', h: '16px'
+}
+
+,
+{
+w: '100%', h: '11px'
+}
+
+,
+{
+w: '75%', h: '11px'
+}
+
+],
+[ {
+  w: '30%', h: '9px'
+}
+
+,
+{
+w: '55%', h: '16px'
+}
+
+,
+{
+w: '100%', h: '11px'
+}
+
+,
+{
+w: '80%', h: '11px'
+}
+
+],
+[ {
+  w: '30%', h: '9px'
+}
+
+,
+{
+w: '70%', h: '16px'
+}
+
+,
+{
+w: '100%', h: '11px'
+}
+
+,
+{
+w: '60%', h: '11px'
+}
+
+],
+];
+
+export default function RecommendationSkeleton() {
+  return (<div> {
+      bars.map((card, i)=> (<div key= {
+            i
+          }
+
+          style= {
+              {
+              padding:'16px 0', borderBottom:'1px solid #141414'
+            }
+          }
+
+          > {
+            card.map((bar, j)=> (<div key= {
+                  j
+                }
+
+                style= {
+                    {
+
+                    width:bar.w, height:bar.h, marginBottom:'8px',
+                    background:'linear-gradient(90deg,#1a1a1a,#252525,#1a1a1a)',
+                    backgroundSize:'200% auto',
+                    borderRadius:'2px',
+                    animation:`shimmer 1.5s linear infinite`,
+                    animationDelay:`$ {
+                      i * 0.15 + j * 0.05
+                    }
+
+                    s`,
+                  }
+                }
+
+                />))
+          }
+
+          </div>))
+    }
+
+    </div>);
+}
+
+``` --- ## STEP 9 — APP ROOT (`src/App.tsx`) ```tsx import {
+  useState,
+  useCallback
+}
+
+from 'react';
+import Particles from '@/components/Particles';
+import Navbar from '@/components/Navbar';
+import Hero from '@/components/Hero';
+import UploadPanel from '@/components/UploadPanel';
+import AnalyzeButton from '@/components/AnalyzeButton';
+import RecommendationList from '@/components/RecommendationList';
+
+import {
+  useAnalyze
+}
+
+from '@/hooks/useAnalyze';
+
+export default function App() {
+  const [file,
+  setFile]=useState<File | null>(null);
+
+  const {
+    state,
+    analyze
+  }
+
+  =useAnalyze();
+
+  const handleFile=useCallback((f: File)=> setFile(f), []);
+
+  const handleAnalyze=useCallback(()=> {
+      if (file) analyze(file);
+    }
+
+    , [file, analyze]);
+
+  return (<div style= {
+        {
+        background:'#080808', minHeight:'100vh', position:'relative', overflow:'hidden'
+      }
+    }
+
+    > <Particles /> <div style= {
+        {
+        position:'relative', zIndex:1, maxWidth:'960px', margin:'0 auto'
+      }
+    }
+
+    > <Navbar /> <Hero /> <div style= {
+        {
+        display:'grid', gridTemplateColumns:'1fr 1fr', minHeight:'500px'
+      }
+    }
+
+    > {
+      /* Left — upload */
+    }
+
+    <div style= {
+        {
+        padding:'24px 28px', borderRight:'1px solid #141414'
+      }
+    }
+
+    > <div style= {
+        {
+        fontSize:'9px', fontWeight:500, letterSpacing:'.2em', textTransform:'uppercase',
+        color:'#333', marginBottom:'18px', display:'flex', alignItems:'center', gap:'10px',
+        animation:'fadeUp .5s .4s ease both', opacity:0, animationFillMode:'forwards',
+      }
+    }
+
+    > <span>Your outfit</span> <div style= {
+        {
+        flex:1, height:'1px', background:'linear-gradient(90deg,#1f1f1f,transparent)'
+      }
+    }
+
+    /> </div> <UploadPanel onFile= {
+      handleFile
+    }
+
+    /> <AnalyzeButton onClick= {
+      handleAnalyze
+    }
+
+    loading= {
+      state.status==='loading'
+    }
+
+    disabled= {
+      !file || state.status==='loading'
+    }
+
+    /> </div> {
+      /* Right — recommendations */
+    }
+
+    <div style= {
+        {
+        padding:'24px 28px'
+      }
+    }
+
+    > <RecommendationList state= {
+      state
+    }
+
+    /> </div> </div> {
+      /* Footer */
+    }
+
+    <footer style= {
+        {
+        borderTop:'1px solid #141414', height:'44px',
+        display:'flex', alignItems:'center', justifyContent:'space-between',
+        padding:'0 28px', position:'relative',
+        animation:'fadeUp .4s 1s ease both', opacity:0, animationFillMode:'forwards',
+      }
+    }
+
+    > <div style= {
+        {
+        position:'absolute', top:'-1px', left:'28px', right:'28px', height:'1px',
+        background:'linear-gradient(90deg,transparent,#b8860b33,#ffd70044,#b8860b33,transparent)'
+      }
+    }
+
+    /> <span style= {
+        {
+        fontFamily:"'Playfair Display',serif", fontStyle:'italic', fontSize:'12px', color:'#333'
+      }
+    }
+
+    > StyleBot </span> <div style= {
+        {
+        display:'flex', alignItems:'center', gap:'8px'
+      }
+    }
+
+    > <div style= {
+        {
+        width:'5px', height:'5px', background:'#ffd700', borderRadius:'50%',
+        boxShadow:'0 0 6px #ffd70066'
+      }
+    }
+
+    className="anim-cornerPulse" /> <span style= {
+        {
+        fontSize:'9px', color:'#222', letterSpacing:'.12em', textTransform:'uppercase'
+      }
+    }
+
+    > Live · Gemini AI </span> </div> </footer> </div> </div>);
+}
+
+``` ### `src/main.tsx` ```tsx import {
+  StrictMode
+}
+
+from 'react';
+
+import {
+  createRoot
+}
+
+from 'react-dom/client';
+import '@/index.css';
+import App from '@/App';
+
+createRoot(document.getElementById('root') !).render(<StrictMode> <App /> </StrictMode>);
+
+``` ### `index.html` ```html < !doctype html><html lang="en"><head><meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="description" content="AI-powered fashion accessory recommender using Gemini Vision AI." /><title>StyleBot — AI Fashion Recommender</title><link rel="icon" type="image/svg+xml" href="/vite.svg" /></head><body><div id="root"></div><script type="module" src="/src/main.tsx"></script></body></html>``` --- ## STEP 10 — FINAL `package.json` ```json {
+
+  "name": "stylebot",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+      "build": "tsc -b && vite build",
+      "preview": "vite preview",
+      "lint": "eslint ./src --ext ts,tsx --report-unused-disable-directives --max-warnings 0"
+  }
+
+  ,
+  "dependencies": {
+    "react": "^19.0.0",
+      "react-dom": "^19.0.0",
+      "react-dropzone": "^14.3.5"
+  }
+
+  ,
+  "devDependencies": {
+    "@types/react": "^19.0.0",
+      "@types/react-dom": "^19.0.0",
+      "@vitejs/plugin-react": "^4.3.4",
+      "autoprefixer": "^10.4.20",
+      "postcss": "^8.5.1",
+      "tailwindcss": "^3.4.17",
+      "typescript": "^5.7.2",
+      "vite": "^8.0.0"
+  }
+}
+
+``` --- ## STEP 11 — README UPDATE ```markdown # StyleBot — AI Fashion Accessory Recommender Upload an outfit photo. Get five styled accessory recommendations via Gemini Vision AI. **[Live Demo →](your-vercel-url)** ## Stack React 19 · TypeScript · Vite 8 · Tailwind CSS 3 · Google Gemini 1.5 Flash ## Setup 1. `git clone https: //github.com/Fr0sTnUb/AI-Chatbot && cd AI-Chatbot`
+2. `npm install` 3. `cp .env.example .env.local` — paste your Gemini API key 4. `npm run dev` — opens on http: //localhost:5173
+
+## Get a Gemini API Key 1. Go to https: //aistudio.google.com/app/apikey
+2. Create a new key 3. Paste it in `.env.local` as `VITE_GEMINI_API_KEY=your_key` ## Architecture src/api/analyze.ts — Gemini API integration+response parser src/hooks/useAnalyze.ts — state machine for the analyze flow src/components/ — Navbar,
+Hero,
+UploadPanel,
+Cards,
+Skeleton,
+Particles src/types/index.ts — shared TypeScript interfaces ## Features - React 19 with useCallback,
+useState,
+discriminated union state machine - Vite 8 with esbuild minification — sub-second HMR - Animated dark glamour UI: shimmer gold,
+scan lines,
+rising particles - Drag-and-drop upload (react-dropzone) with 5MB validation - Structured Gemini prompt with parsed recommendations - Typed error handling with user-friendly messages ``` --- *Do not use any Next.js APIs: no `useRouter`,
+no `Image` from next/image,
+no API routes,
+no `app/` directory,
+no server components. This is a pure client-side React SPA.*ns-serif;
+color: var(--text-1);
+overflow-x: hidden;
+}
+
+/* ── Shimmer text ─────────────────────────────────── */
+.shimmer-text {
+  background: linear-gradient(90deg, var(--gold-dk), var(--gold-lt), var(--gold-pale),
+      var(--gold-mid), var(--gold-dk));
+  background-size: 300% auto;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: shimmer 3s linear infinite;
+}
+
+/* ── Shimmer background (buttons) ────────────────── */
+.shimmer-bg {
+  background: linear-gradient(90deg, var(--gold-dk), var(--gold-mid), var(--gold-lt),
+      var(--gold-pale), var(--gold-lt), var(--gold-mid), var(--gold-dk));
+  background-size: 300% auto;
+  animation: shimmer 2.5s linear infinite;
+}
+
+/* ── Gold line ────────────────────────────────────── */
+.gold-line {
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--gold-dk) 20%,
+      var(--gold-lt) 50%, var(--gold-dk) 80%, transparent);
+}
+
+/* ── Keyframes ────────────────────────────────────── */
+@keyframes shimmer {
+  0% {
+    background-position: -300% center;
+  }
+
+  100% {
+    background-position: 300% center;
+  }
+}
+
+@keyframes pulse-dot {
+
+  0%,
+  100% {
+    opacity: 1;
+    transform: scale(1) rotate(0deg);
+  }
+
+  50% {
+    opacity: .4;
+    transform: scale(.6) rotate(180deg);
+  }
+}
+
+@keyframes float {
+
+  0%,
+  100% {
+    transform: translateY(0) rotate(-1deg);
+  }
+
+  50% {
+    transform: translateY(-7px) rotate(1deg);
+  }
+}
+
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes scanline {
+  0% {
+    transform: translateY(-100%);
+    opacity: .5;
+  }
+
+  100% {
+    transform: translateY(500%);
+    opacity: 0;
+  }
+}
+
+@keyframes borderGlow {
+
+  0%,
+  100% {
+    box-shadow: 0 0 0 0 rgba(255, 215, 0, 0);
+  }
+
+  50% {
+    box-shadow: 0 0 20px 2px rgba(255, 215, 0, .1);
+  }
+}
+
+@keyframes cornerPulse {
+
+  0%,
+  100% {
+    opacity: .35;
+  }
+
+  50% {
+    opacity: 1;
+  }
+}
+
+@keyframes particleDrift {
+  0% {
+    transform: translateY(0) translateX(0) scale(1);
+    opacity: .7;
+  }
+
+  100% {
+    transform: translateY(-90px) translateX(var(--dx, 0px)) scale(0);
+    opacity: 0;
+  }
+}
+
+@keyframes revealLine {
+  from {
+    width: 0;
+  }
+
+  to {
+    width: 32px;
+  }
+}
+
+@keyframes glowPulse {
+
+  0%,
+  100% {
+    text-shadow: 0 0 8px rgba(255, 215, 0, .15);
+  }
+
+  50% {
+    text-shadow: 0 0 28px rgba(255, 215, 0, .5),
+      0 0 56px rgba(255, 215, 0, .15);
+  }
+}
+
+@keyframes rotateStar {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes navSlide {
+  from {
+    opacity: 0;
+    transform: translateY(-100%);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes tagAppear {
+  from {
+    transform: scale(.7);
+    opacity: 0;
+  }
+
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes heroReveal {
+  from {
+    opacity: 0;
+    letter-spacing: .3em;
+  }
+
+  to {
+    opacity: 1;
+    letter-spacing: -.015em;
+  }
+}
+
+/* ── Utility animation classes ────────────────────── */
+.anim-fadeUp {
+  animation: fadeUp .5s ease both;
+}
+
+.anim-navSlide {
+  animation: navSlide .6s cubic-bezier(.16, 1, .3, 1) both;
+}
+
+.anim-float {
+  animation: float 3s ease-in-out infinite;
+}
+
+.anim-rotateStar {
+  animation: rotateStar 4s linear infinite;
+}
+
+.anim-glowPulse {
+  animation: glowPulse 3s ease-in-out infinite;
+}
+
+.anim-cornerPulse {
+  animation: cornerPulse 2s ease-in-out infinite;
+}
+
+.anim-scanline {
+  animation: scanline 4s ease-in-out infinite;
+}
+
+.anim-shimmerText {
+  animation: shimmer 3s linear infinite, glowPulse 4s ease-in-out infinite;
+}
